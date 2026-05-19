@@ -4,8 +4,6 @@
 package v1
 
 import (
-	"testing"
-
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"k8s.io/utils/ptr"
@@ -13,11 +11,6 @@ import (
 	"github.com/kai-scheduler/KAI-scheduler/pkg/apis/kai/v1/admission"
 	"github.com/kai-scheduler/KAI-scheduler/pkg/apis/kai/v1/common"
 )
-
-func TestConfigSpec(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "ConfigSpec suite")
-}
 
 var _ = Describe("ConfigSpec", func() {
 	Describe("SetDefaultsWhereNeeded", func() {
