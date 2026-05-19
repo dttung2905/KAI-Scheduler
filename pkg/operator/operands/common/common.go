@@ -28,6 +28,16 @@ import (
 
 var controllerTypes = []string{"Deployment", "DaemonSet"}
 
+// PodDisruptionBudgetImplementedServices lists operand resource names with operator-side PDB creation.
+var PodDisruptionBudgetImplementedServices = map[string]struct{}{
+	"admission": {},
+}
+
+func PodDisruptionBudgetImplemented(serviceName string) bool {
+	_, ok := PodDisruptionBudgetImplementedServices[serviceName]
+	return ok
+}
+
 // KAI services that should be monitored via ServiceMonitor
 // For now, we only monitor the queue controller. Add more services here if needed.
 var KaiServicesForServiceMonitor = []struct {
@@ -169,7 +179,10 @@ func DeploymentForKAIConfig(
 	return deployment, nil
 }
 
-func ShouldCreatePodDisruptionBudget(replicas *int32, service *kaiv1common.Service) bool {
+func ShouldCreatePodDisruptionBudget(serviceName string, replicas *int32, service *kaiv1common.Service) bool {
+	if !PodDisruptionBudgetImplemented(serviceName) {
+		return false
+	}
 	if replicas == nil || *replicas <= 1 {
 		return false
 	}
@@ -187,7 +200,7 @@ func PodDisruptionBudgetForKAIConfig(
 	replicas *int32,
 	service *kaiv1common.Service,
 ) (client.Object, error) {
-	if !ShouldCreatePodDisruptionBudget(replicas, service) {
+	if !ShouldCreatePodDisruptionBudget(resourceName, replicas, service) {
 		return nil, nil
 	}
 

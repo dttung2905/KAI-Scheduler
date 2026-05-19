@@ -59,6 +59,7 @@ func (s *Service) SetDefaultsWhereNeeded(imageName string) {
 	s.K8sClientConfig.SetDefaultsWhereNeeded()
 
 	s.PodDisruptionBudget = SetDefault(s.PodDisruptionBudget, &PodDisruptionBudget{})
-	s.PodDisruptionBudget.Enabled = SetDefault(s.PodDisruptionBudget.Enabled, ptr.To(true))
+	// Disabled by default: PDB creation is opt-in per operand in the operator.
+	s.PodDisruptionBudget.Enabled = SetDefault(s.PodDisruptionBudget.Enabled, ptr.To(false))
 	s.PodDisruptionBudget.MaxUnavailable = SetDefault(s.PodDisruptionBudget.MaxUnavailable, ptr.To(int32(1)))
 }
