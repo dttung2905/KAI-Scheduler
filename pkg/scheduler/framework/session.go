@@ -50,6 +50,22 @@ import (
 
 var server *PluginServer
 
+type ScenarioGeneratorContext interface {
+	Action() ActionType
+}
+
+type ScenarioGenerator interface {
+	Name() string
+	Next() api.ScenarioInfo
+}
+
+type ScenarioGeneratorFactory func(ctx ScenarioGeneratorContext) ScenarioGenerator
+
+type ScenarioGeneratorRegistration struct {
+	Name    string
+	Factory ScenarioGeneratorFactory
+}
+
 type Session struct {
 	ID    string
 	Cache cache.Cache
@@ -82,6 +98,7 @@ type Session struct {
 	BindRequestMutateFns                  []api.BindRequestMutateFn
 	NumaPlacementFn                       api.NumaPlacementFn
 	PreJobAllocationFns                   []api.PreJobAllocationFn
+	ScenarioGeneratorRegistrations        []ScenarioGeneratorRegistration
 
 	Config          *conf.SchedulerConfiguration
 	plugins         map[string]Plugin
