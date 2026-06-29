@@ -181,7 +181,6 @@ queuecontroller:
     name: queuecontroller
     pullPolicy: IfNotPresent
     # tag: ""  # Optional: Override global.tag or Chart.AppVersion
-  certSecretName: queuecontroller-webhook-tls-secret
   affinity: {}
 
 admission:
@@ -191,7 +190,6 @@ admission:
     name: admission
     pullPolicy: IfNotPresent
     # tag: ""  # Optional: Override global.tag or Chart.AppVersion
-  certSecretName: admission-webhook-tls-secret
   ports:
     webhookPort: 9443
     metricsPort: 8080
