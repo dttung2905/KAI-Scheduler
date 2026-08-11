@@ -140,7 +140,6 @@ func (app *App) RegisterPlugins(admissionPlugins *admissionplugins.KaiAdmissionP
 	app.admissionPlugins = admissionPlugins
 }
 
-// +kubebuilder:rbac:groups=core,resources=configmaps,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=core,resources=events,verbs=create;patch;update
 
