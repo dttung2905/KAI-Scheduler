@@ -25,6 +25,9 @@ global:
   affinity: {}
   requireDefaultPodAntiAffinityTerm: false
   tolerations: []
+  # Additional tolerations for cluster DaemonSets (e.g. NUMA placement exporter).
+  # Merged ahead of each DaemonSet's own tolerations by the operator.
+  daemonsetsTolerations: []
   priorityClassName: ""
   namespaceLabelSelector: {}
   podLabelSelector: {}
