@@ -1,0 +1,6 @@
+kind: Fixed
+body: Honor postCleanup.serviceAccountName on the post-delete ServiceAccount, ClusterRole, and ClusterRoleBinding
+time: 2026-08-16T09:35:35.907047345+01:00
+custom:
+    Author: dttung2905
+    Issue: ""

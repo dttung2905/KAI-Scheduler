@@ -5,15 +5,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: post-delete-cleanup
+  name: {{ .Values.postCleanup.serviceAccountName }}
   annotations:
     {{- include "kai-scheduler.post-delete-hook-annotations" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: post-delete-cleanup
+    name: {{ .Values.postCleanup.serviceAccountName }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: post-delete-cleanup
+  name: {{ .Values.postCleanup.serviceAccountName }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
