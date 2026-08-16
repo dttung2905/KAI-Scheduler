@@ -98,7 +98,7 @@ tests:
           path: metadata.name
           value: custom-cleanup-sa
 
-  - it: should name the ClusterRole from postCleanup.serviceAccountName
+  - it: should keep ClusterRole name fixed when serviceAccountName changes
     templates:
       - rbac/post-delete-clusterrole.yaml
     set:
@@ -106,9 +106,9 @@ tests:
     asserts:
       - equal:
           path: metadata.name
-          value: custom-cleanup-sa
+          value: post-delete-cleanup
 
-  - it: should wire ClusterRoleBinding subject and roleRef from postCleanup.serviceAccountName
+  - it: should bind the custom ServiceAccount while keeping ClusterRoleBinding and roleRef fixed
     templates:
       - rbac/post-delete-binding.yaml
     set:
@@ -116,13 +116,13 @@ tests:
     asserts:
       - equal:
           path: metadata.name
-          value: custom-cleanup-sa
+          value: post-delete-cleanup
       - equal:
           path: subjects[0].name
           value: custom-cleanup-sa
       - equal:
           path: roleRef.name
-          value: custom-cleanup-sa
+          value: post-delete-cleanup
 
   - it: should point the Job at the custom ServiceAccount
     templates:

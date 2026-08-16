@@ -302,8 +302,7 @@ postCleanup:
     name: crd-upgrader
     pullPolicy: IfNotPresent
     # tag: ""  # Optional: Override global.tag or Chart.AppVersion
-  # Name of the ServiceAccount, ClusterRole, and ClusterRoleBinding used by the
-  # post-delete hook Job. Keep these resources in sync by changing this one value.
+  # Name of the ServiceAccount used by the post-delete hook Job.
   serviceAccountName: post-delete-cleanup
   resources: {}
 
