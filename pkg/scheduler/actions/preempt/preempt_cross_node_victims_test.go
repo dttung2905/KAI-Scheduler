@@ -17,17 +17,18 @@ import (
 	"github.com/kai-scheduler/KAI-scheduler/pkg/scheduler/test_utils/tasks_fake"
 )
 
-// TestPreemptDoesNotEvictVictimsOnUnusedNodes covers #2426: when a scenario includes
-// victims on nodes the preemptor never uses (e.g. an elastic job spanning nodes),
-// those pods must stay Running. Only victims that free capacity on the preemptor's
-// placement node(s) are evicted.
-func TestPreemptDoesNotEvictVictimsOnUnusedNodes(t *testing.T) {
+// TestPreemptDoesNotEvictVictimsThatFitOriginalNode covers #2426 with the
+// maintainer-preferred approach: after the preemptor is placed, victim
+// reallocation prefers each victim's original node. Victims that still fit
+// there are unevicted instead of being pipelined onto another node and then
+// deleted on commit.
+func TestPreemptDoesNotEvictVictimsThatFitOriginalNode(t *testing.T) {
 	test_utils.InitTestingInfrastructure()
 	controller := NewController(t)
 	defer controller.Finish()
 
 	topo := test_utils.TestTopologyBasic{
-		Name: "pinned preemptor must not evict elastic victims on unused nodes",
+		Name: "pinned preemptor must not evict victims that still fit their original node",
 		Jobs: []*jobs_fake.TestJobBasic{
 			{
 				Name:                "elastic-victim",
@@ -86,8 +87,9 @@ func TestPreemptDoesNotEvictVictimsOnUnusedNodes(t *testing.T) {
 	}
 
 	ssn := test_utils.BuildSession(topo, controller)
-	// Match production default: preempt/reclaim must not treat cross-node
-	// simulation pipelines as real consolidating moves (#2426).
+	// Production preempt/reclaim default: simulation pipelines of victims are
+	// not consolidating moves, so a wrong cross-node pipeline would become a
+	// real eviction on commit.
 	ssn.OverrideAllowConsolidatingReclaim(false)
 
 	preempt.New().Execute(ssn)
